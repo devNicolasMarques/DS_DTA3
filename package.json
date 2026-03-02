@@ -26,7 +26,10 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@types/config": "^3.3.5",
     "@types/express": "^5.0.6",
-    "express": "^5.2.1"
+    "config": "^4.4.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.2.3"
   }
 }
