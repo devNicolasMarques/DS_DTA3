@@ -1,30 +1,23 @@
-import express, { Request, response, Response, Router } from 'express';
-
-interface Person {
-    name: string
-    lastName: string
-    id: number
-}
+import express, { Request, Response, Router } from 'express';
+import Person from '../models/Person.ts'
 
 const router: Router = express.Router();
-const people: Person[] = [];
 
 router
-    .post('/register', (req: Request, res: Response) => {
-        const { id, name, lastName } = req.body
-        console.log(id, name, lastName)
-        people.push({id, name, lastName})
+    .post('/register', async (req: Request, res: Response) => {
+        const { name, lastname, age } = req.body
+        const person = new Person({name, lastname, age})
+        await person.save()
         res.status(200).send("Registrado com sucesso!")
     })
-    .get('/users', (req: Request, res: Response) => {
-        res.status(200).send({ users: people })
+    .get('/users', async (req: Request, res: Response) => {
+        const people = await Person.find()
+        res.status(200).send({ response: people })
     })
     .get('/users/:id', (req: Request, res: Response) => {
-        const {id} = req.params
+        const { id } = req.params
         let convertedId = Number(id)
-        let mano = people.find(person => person.id === convertedId)
-        console.log(mano)
-        res.status(200).send(`Buscando usuário  ${{mano}}`)
+      
     })
     .get('/filter', (req: Request, res: Response) => {
         const { name, lastName } = req.query
