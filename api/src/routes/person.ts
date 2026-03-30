@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import express, { Request, Response, Router } from 'express';
 import Person from '../models/Person.ts'
 
@@ -31,8 +32,15 @@ router
     .patch('updatePatch/:id', (req: Request, res: Response) => {
         const { id } = req.params;
         const { nome } = req.body;
+=======
+import express , {Router } from 'express';
+import PersonController from '../controllers/personController.ts';
+import { validateRegister } from '../middlewares/personMiddleware.ts';
+const router: Router = express.Router()
 
-        res.send(`Nome da pessoa com ID ${id} foi atualizado para: ${nome}`);
-    })
+router
+    .get('/usuarios', PersonController.getUsers)
+    .post('/registrar', validateRegister, PersonController.registerUser)
+>>>>>>> 1bf6098f921a42b9043bd683a4b5a2937e514b23
 
-export default router;
+export default router
