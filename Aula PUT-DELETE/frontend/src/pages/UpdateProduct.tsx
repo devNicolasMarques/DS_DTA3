@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios'
 
 export const UpdateProduct = () => {
@@ -9,14 +9,26 @@ export const UpdateProduct = () => {
     const [stock, setStock] = useState(0)
     const [price, setPrice] = useState(0)
     const navigate = useNavigate();
+    const { id } = useParams()
 
-    const getProductData = async (_id: string) => {
-        const response = axios.get(`http://localhost:8080/api/products/findById/${_id}`)
+    const getProductData = async () => {
+        const response = await axios.get(`http://localhost:8080/api/products/findById/${id}`)
+        console.log(response.data.response)
+        setName(response.data.response.name)
+        setCategory(response.data.response.category)
+        setPrice(response.data.response.price)
+        setStock(response.data.response.stock)
+        setDescription(response.data.response.description)
     }
 
-    const createProduct = async () => {
+    useEffect(() => {
+        getProductData()
+        console.log(id)
+    },[])
+
+    const update = async () => {
         try {
-            await axios.post("http://localhost:8080/api/products/create", {
+            await axios.put(`http://localhost:8080/api/products/update/${id}`, {
                 name,
                 description,
                 category,
@@ -36,7 +48,7 @@ export const UpdateProduct = () => {
 
                 <div className="mb-6 text-center">
                     <h1 className="text-2xl font-bold text-gray-800">
-                        Cadastro de Produto
+                        Atualizar Produto
                     </h1>
                     <p className="text-gray-500 text-sm">
                         Preencha os dados abaixo
@@ -50,6 +62,7 @@ export const UpdateProduct = () => {
                         <input 
                             className="w-full mt-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                             onChange={(e) => setName(e.target.value)}
+                            value={name}
                         />
                     </div>
 
@@ -58,6 +71,7 @@ export const UpdateProduct = () => {
                         <input 
                             className="w-full mt-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                             onChange={(e) => setDescription(e.target.value)}
+                            value={description}
                         />
                     </div>
 
@@ -66,6 +80,7 @@ export const UpdateProduct = () => {
                         <input 
                             className="w-full mt-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                             onChange={(e) => setCategory(e.target.value)}
+                            value={category}
                         />
                     </div>
 
@@ -75,6 +90,7 @@ export const UpdateProduct = () => {
                             type="number"
                             className="w-full mt-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                             onChange={(e) => setStock(Number(e.target.value))}
+                            value={stock}
                         />
                     </div>
 
@@ -84,16 +100,17 @@ export const UpdateProduct = () => {
                             type="number"
                             className="w-full mt-1 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                             onChange={(e) => setPrice(Number(e.target.value))}
+                            value={price}
                         />
                     </div>
 
                 </div>
                 
                 <button 
-                    onClick={createProduct}
+                    onClick={update}
                     className="w-full mt-6 bg-blue-600 text-white py-3 rounded-xl font-medium shadow-md hover:bg-blue-700 hover:scale-[1.02] transition"
                 >
-                    Criar Produto
+                    Atualizar Produto
                 </button>
 
             </div>
