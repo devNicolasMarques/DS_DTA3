@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 interface Product {
-    id: string
+    _id: string
     name: string
     stock: number
     price: number
@@ -15,7 +15,13 @@ export const GetProducts = () => {
 
     const fetchData = async () => {
         const response = await axios.get("http://localhost:8080/api/products/find")
-        setProducts(response.data.users) // confere se é users mesmo
+        setProducts(response.data.users)
+        console.log(response.data.users)
+    }
+
+    const deleteProduct = async (_id: string) => {
+        await axios.delete(`http://localhost:8080/api/products/remove/${_id}`)
+        fetchData()
     }
 
     useEffect(() => {
@@ -41,13 +47,14 @@ export const GetProducts = () => {
                                 <th className="px-6 py-4">Nome</th>
                                 <th className="px-6 py-4">Qtd</th>
                                 <th className="px-6 py-4">Preço</th>
+                                <th className="px-6 py-4">Ações</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             {products.map((product) => (
                                 <tr 
-                                    key={product.id} 
+                                    key={product._id} 
                                     className="border-b last:border-none hover:bg-gray-50 transition"
                                 >
                                     <td className="px-6 py-4 font-medium text-gray-800">
@@ -65,6 +72,10 @@ export const GetProducts = () => {
                                             style: 'currency', 
                                             currency: 'BRL' 
                                         })}
+                                    </td>
+                                    <td className="px-6 py-4 font-medium">
+                                        <button className="rounded-sm p-2 bg-red-600 text-white mx-4" onClick={() => deleteProduct(product._id)}>Deletar</button>
+                                        <button className="rounded-sm p-2 bg-blue-600 text-white mx-4">Atualizar</button>
                                     </td>
                                 </tr>
                             ))}
