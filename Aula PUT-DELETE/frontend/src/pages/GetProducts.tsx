@@ -19,6 +19,10 @@ export const GetProducts = () => {
         console.log(response.data.users)
     }
 
+    const updateProduct = async (_id: string) => {
+        return navigate(`/update/${_id}`)
+    }
+
     const deleteProduct = async (_id: string) => {
         await axios.delete(`http://localhost:8080/api/products/remove/${_id}`)
         fetchData()
@@ -75,7 +79,7 @@ export const GetProducts = () => {
                                     </td>
                                     <td className="px-6 py-4 font-medium">
                                         <button className="rounded-sm p-2 bg-red-600 text-white mx-4" onClick={() => deleteProduct(product._id)}>Deletar</button>
-                                        <button className="rounded-sm p-2 bg-blue-600 text-white mx-4">Atualizar</button>
+                                        <button className="rounded-sm p-2 bg-blue-600 text-white mx-4" onClick={() => updateProduct(product._id)}>Atualizar</button>
                                     </td>
                                 </tr>
                             ))}
