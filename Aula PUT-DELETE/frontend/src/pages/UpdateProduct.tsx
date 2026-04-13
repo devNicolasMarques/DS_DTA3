@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios'
+import Swal from 'sweetalert2';
 
 export const UpdateProduct = () => {
     const [name, setName] = useState("")
@@ -26,19 +27,33 @@ export const UpdateProduct = () => {
         console.log(id)
     },[])
 
+    
+
     const update = async () => {
-        try {
-            await axios.put(`http://localhost:8080/api/products/update/${id}`, {
-                name,
-                description,
-                category,
-                stock,
-                price
-            })
-            navigate("/")
-        } catch (error) {
-            console.error(error)
-        }
+            Swal.fire({
+                title: "Confirmar atualização?",
+                showConfirmButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Confirmar",
+                cancelButtonText: "Cancelar"
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try{
+                        await axios.put(`http://localhost:8080/api/products/update/${id}`, {
+                            name,
+                            description,
+                            category,
+                            stock,
+                            price
+                        })
+                        Swal.fire("Atualizado com sucesso", "", "success");
+                        navigate("/")
+                    }
+                    catch{
+                        Swal.fire("Erro!", "", "error");
+                    }
+                }
+              });
     }
 
     return(
