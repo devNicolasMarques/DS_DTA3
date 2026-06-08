@@ -6,13 +6,21 @@ export default class UserController {
     static async create(req: Request, res: Response){
         const data: registerUserDto = req.body
         try{
+            await registerUser(data)
+            return res.status(200).send({ response: "Usuário registrado com sucesso!"})
         }
-        catch(e){
+        catch(error){
+            console.error(error)
+        
+            return res.status(500).json({ // resposta para ver o erro completo da api(ajudou a solucionar o erro de PrismaClientInitialization)
+                message: error instanceof Error
+                    ? error.message
+                    : error
+            })
         }
     }
 
     static async show(req: Request, res: Response){
-        const {id} = req.params
         try{
         }
         catch(e){
@@ -29,7 +37,7 @@ export default class UserController {
     }
 
     static async delete(req: Request, res: Response){
-        const data: registerUserDto = req.body
+        const {id} = req.params
         try{
         }
         catch(e){

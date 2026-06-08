@@ -2,7 +2,10 @@ import { registerUserDto, updateUserDto } from "../dtos/userDTO"
 import { prisma }  from '../lib/prisma'
 
 export const registerUser = async (data: registerUserDto) => {
-   
+   const { name, email, password } = data
+    return await prisma.user.create({
+        data: {name, email, password}
+    })
 }
 
 export const showUsers = async () => {
